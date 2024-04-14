@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Pessoas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/criar.html">Criar Pessoa</a></li>
+                <li><a href="/deletar.html">Deletar Pessoa</a></li>
+                <li><a href="/atualizar.html">Atualizar Pessoa</a></li>
+                <li><a href="/listar.html">Listar Pessoas</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Adicionar Pessoas</h1>
+        <form id="form">
+            <div id="people-container">
+                <div class="person">
+                    <label for="name">Nome:</label>
+                    <input type="text" name="name" required>
+                    <label for="age">Idade:</label>
+                    <input type="number" name="age" required>
+                    <label for="cpf">CPF:</label>
+                    <input type="text" name="cpf" required>
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" required>
+                    <button type="button" class="remove-person-btn">Remover Pessoa</button>
+                </div>
+            </div>
+            <button type="button" id="add-person-btn">Acrescentar pessoa na lista</button>
+            <button type="button" id="submit-btn">Enviar</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const addPersonBtn = document.getElementById("add-person-btn");
+            const submitBtn = document.getElementById("submit-btn");
+            const form = document.getElementById("form");
+            const peopleContainer = document.getElementById("people-container");
+
+            addPersonBtn.addEventListener("click", function () {
+                const allInputsFilled = Array.from(peopleContainer.querySelectorAll(".person input")).every(input => input.value.trim() !== "");
+                if (!allInputsFilled) {
+                    alert("Por favor, preencha todos os campos antes de adicionar outra pessoa.");
+                    return;
+                }
+
+                const personDiv = document.createElement("div");
+                personDiv.classList.add("person");
+                personDiv.innerHTML = `
+                            <label for="name">Nome:</label>
+                            <input type="text" name="name" required>
+                            <label for="age">Idade:</label>
+                            <input type="number" name="age" required>
+                            <label for="cpf">CPF:</label>
+                            <input type="text" name="cpf" required>
+                            <label for="email">Email:</label>
+                            <input type="email" name="email" required>
+                            <button type="button" class="remove-person-btn">Remover Pessoa</button>
+                        `;
+                peopleContainer.appendChild(personDiv);
+            });
+            function removePerson(event) {
+                event.target.closest('.person').remove();
+            }
+
+            const removePersonBtns = document.querySelectorAll('.remove-person-btn');
+            removePersonBtns.forEach(btn => {
+                btn.addEventListener('click', removePerson);
+            });
+
+            submitBtn.addEventListener("click", function () {
+                const formData = [];
+                const personDivs = document.querySelectorAll(".person");
+                personDivs.forEach(personDiv => {
+                    const name = personDiv.querySelector('input[name="name"]').value;
+                    const age = personDiv.querySelector('input[name="age"]').value;
+                    const cpf = personDiv.querySelector('input[name="cpf"]').value;
+                    const email = personDiv.querySelector('input[name="email"]').value;
+                    formData.push({ Nome: name, Idade: parseInt(age), CPF: cpf, Email: email });
+                });
+                const jsonData = JSON.stringify(formData);
+                console.log(jsonData);
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonData
+                };
+
+                fetch('http://localhost:5000/api/Pessoa/create', requestOptions)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erro ao enviar os dados.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        alert(data.Message);
+                        console.log(data)
+                    })
+                    .catch(error => {
+                        alert('Erro: Preencha os dados faltantes');
+                        console.log(error)
+                    });
+            });
+        });
+
+    </script>
+    <style>
+
+        html, body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Sora sans", sans-serif;
+        }
+
+        body {
+            background: rgb(2,0,36);
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+            height: 100vh;
+        }
+
+        header {
+            position: absolute;
+            z-index: 200;
+            top: 0;
+            background: rgba(27, 27, 27, 0.23);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        ul {
+            display: flex;
+        }
+        a {
+            margin-right: 50px;
+            text-decoration: none;
+            cursor: pointer; 
+            color: #fefefe;
+            
+        }
+        li {
+            list-style: none;
+        }
+        h1 {
+            color: #fefefe;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        #form {
+            height: 500px;
+        }
+
+        .person {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            background: rgba(27, 27, 27, 0.23);
+            backdrop-filter: blur(10px);
+            border: 0px none;
+            border-radius: 5px;
+            box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 15px 2px;
+            box-sizing: border-box;
+            width: 80%;
+            margin: 10%;
+            position: relative;
+            padding: 40px;
+            overflow-y: auto;
+            font-family: "Sora sans", sans-serif;
+            text-align: center;
+            color: rgb(255, 255, 255);
+        }
+
+            .person label,
+            .person input {
+                margin-bottom: 5px;
+            }
+
+            .person input {
+                padding: 15px;
+                border-top: none;
+                border-right: none;
+                border-left: none;
+                border-image: initial;
+                border-bottom: 1px solid rgb(255, 255, 255);
+                background-color: transparent;
+                margin-bottom: 10px;
+                width: 100%;
+                box-sizing: border-box;
+                font-family: "Sora sans", sans-serif;
+                color: rgb(255, 255, 255);
+                font-size: 18px;
+                outline: none;
+                font-weight: 700;
+            }
+
+        button {
+            width: 100%;
+            background: rgb(226, 223, 183);
+            color: rgb(46, 46, 46);
+            border: 0px none;
+            border-radius: 1px;
+            cursor: pointer;
+            padding: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 15px;
+            font-family: "Sora sans", sans-serif;
+            margin-bottom: 10px;
+        }
+        
+    </style>
+</body>
+</html>

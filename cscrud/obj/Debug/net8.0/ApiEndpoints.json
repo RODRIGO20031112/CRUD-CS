@@ -1,0 +1,71 @@
+[
+  {
+    "ContainingType": "Cscrud.PessoaController",
+    "Method": "AtualizarPessoa",
+    "RelativePath": "api/Pessoa/atualizar",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cpf",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pessoa",
+        "Type": "Cscrud.PessoaModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Cscrud.PessoaController",
+    "Method": "CriarPessoas",
+    "RelativePath": "api/Pessoa/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pessoas",
+        "Type": "System.Collections.Generic.List\u00601[[Cscrud.PessoaModel, cscrud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Cscrud.PessoaController",
+    "Method": "DeletarPessoa",
+    "RelativePath": "api/Pessoa/deletar",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cpf",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Cscrud.PessoaController",
+    "Method": "ListarPessoas",
+    "RelativePath": "api/Pessoa/listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cpf",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
